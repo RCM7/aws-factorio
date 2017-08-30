@@ -1,0 +1,25 @@
+{
+  "variables": {
+    "factorio_version" : "{{env `factorio_version`}}"
+  },
+
+  "builders": [{
+    "type": "amazon-ebs",
+    "region": "eu-west-1",
+    "source_ami": "ami-88e60ff1",
+    "instance_type": "t2.micro",
+    "ssh_username": "admin",
+    "associate_public_ip_address": true,
+    "vpc_id": "vpc-800c81e7",
+    "subnet_id": "subnet-f51995bc",
+    "ami_name": "factorio-{{user `factorio_version`}}-({{isotime \"20060102150405\"}})"
+  }],
+  
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "./playbook.yml",
+      "extra_arguments": [ "--extra-vars", "factorio_version={{user `factorio_version`}}" ]
+    }
+  ]
+}

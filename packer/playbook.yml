@@ -1,0 +1,15 @@
+---
+
+- hosts: all
+  roles:
+    - role: geerlingguy.docker
+      become: yes
+
+  tasks:
+    - name: Pull factorio image
+      become: true
+      command: "docker pull dtandersen/factorio:{{factorio_version}}"
+
+    - name: Tag image as latest
+      become: true
+      command: "docker tag dtandersen/factorio:{{factorio_version}} dtandersen/factorio:latest"
