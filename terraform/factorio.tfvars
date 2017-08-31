@@ -1,4 +1,4 @@
-ami_id="ami-6e29d217"
+ami_id="ami-44f3093d"
 subnet_id="subnet-f51995bc"
 key_name="rcm"
 vpc_id="vpc-800c81e7"

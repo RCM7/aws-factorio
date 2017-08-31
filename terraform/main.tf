@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "${var.aws_region}"
 }
 
 resource "aws_security_group" "allow_factorio" {
@@ -91,6 +91,7 @@ data "template_file" "factorio_init" {
   vars {
     hostname = "factorio"
     dns_domain = "${var.dns_domain}"
+    s3_url = "s3://s3-${var.aws_region}.amazonaws.com/${var.s3_bucket_name}/"
   }
 }
 

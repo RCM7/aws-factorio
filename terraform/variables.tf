@@ -1,4 +1,9 @@
 
+variable "aws_region" {
+  description = "The AWS Region where to deploy resources"
+  default = "eu-west-1"
+}
+
 
 variable "ami_id" {
   description = "The id of the AMI you want to use"
