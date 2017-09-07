@@ -13,6 +13,11 @@ variable "spot_price" {
   default = "0.03"
 }
 
+variable "spot_request_valid_until" {
+  description = "The end date and time of the request, in UTC ISO8601 format (for example, YYYY-MM-DDTHH:MM:SSZ). At this point, no new Spot instance requests are placed or enabled to fulfill the request."
+  default = "2018-10-01T03:00:00Z"
+}
+
 variable "instance_type" {
   description = "The AWS instance type you want to spin up"
   default = "m3.medium"

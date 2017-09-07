@@ -95,19 +95,28 @@ data "template_file" "factorio_init" {
   }
 }
 
-resource "aws_spot_instance_request" "instance" {
-  ami           = "${var.ami_id}"
-  spot_price    = "${var.spot_price}"
+resource "aws_launch_configuration" "instance_conf" {
+  image_id      = "${var.ami_id}"
   instance_type = "${var.instance_type}"
-  subnet_id     = "${var.subnet_id}"
   key_name      = "${var.key_name}"
-  vpc_security_group_ids = ["${aws_security_group.allow_factorio.id}", "sg-335cc94b"]
+  security_groups = ["${aws_security_group.allow_factorio.id}", "sg-335cc94b"]
   iam_instance_profile = "${aws_iam_instance_profile.factorio.name}"
 
   user_data = "${data.template_file.factorio_init.rendered}"
   associate_public_ip_address = true
+  spot_price        = "${var.spot_price}"
 
-  tags {
-    Name = "factorio"
+  lifecycle {
+    create_before_destroy = true
   }
+}
+
+resource "aws_autoscaling_group" "factorio" {
+  name                 = "factorio"
+  launch_configuration = "${aws_launch_configuration.instance_conf.name}"
+  vpc_zone_identifier  = ["${var.subnet_id}"]
+
+  min_size             = 0
+  max_size             = 1
+  desired_capacity     = 1
 }
