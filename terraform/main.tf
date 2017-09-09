@@ -119,4 +119,10 @@ resource "aws_autoscaling_group" "factorio" {
   min_size             = 0
   max_size             = 1
   desired_capacity     = 1
+
+  tag {
+    key                 = "Name"
+    value               = "factorio"
+    propagate_at_launch = true
+  }
 }
