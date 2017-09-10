@@ -4,6 +4,9 @@ variable "aws_region" {
   default = "eu-west-1"
 }
 
+variable "aws_account_id" {
+  description = "The id of the AWS account where you'll be deploying factorio"
+}
 
 variable "ami_id" {
   description = "The id of the AMI you want to use"
@@ -42,3 +45,4 @@ variable "dns_domain" {
 variable "s3_bucket_name" {
   description = "The name of the S3 bucket for factorio backups"
 }
+
