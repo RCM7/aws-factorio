@@ -5,3 +5,4 @@ vpc_id=
 dns_domain=
 s3_bucket_name=
 aws_account_id=
+lambda_auth_token=

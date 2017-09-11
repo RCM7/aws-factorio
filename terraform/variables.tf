@@ -17,7 +17,7 @@ variable "spot_price" {
 }
 
 variable "spot_request_valid_until" {
-  description = "The end date and time of the request, in UTC ISO8601 format (for example, YYYY-MM-DDTHH:MM:SSZ). At this point, no new Spot instance requests are placed or enabled to fulfill the request."
+  description = "The end date and time of the request, in UTC ISO8601 format (for example, YYYY-MM-DDTHH:MM:SSZ). At this point, no new Spot instance requests are placed or enabled to fulfill the request"
   default = "2018-10-01T03:00:00Z"
 }
 
@@ -46,3 +46,6 @@ variable "s3_bucket_name" {
   description = "The name of the S3 bucket for factorio backups"
 }
 
+variable "lambda_auth_token" {
+  description = "The Auth Token to set as environment variable of the lambda function. Used as (very) simple authentication method for now"
+}
