@@ -1,0 +1,90 @@
+#!/usr/bin/env python
+
+import os
+import argparse
+import urllib2
+import json
+
+def apply_action(action):
+    data = json.dumps({"token": os.getenv('FACTORIO_AUTH_TOKEN'),"action": action})
+    content_length = len(data)
+
+    request = urllib2.Request(
+        os.getenv('FACTORIO_API_URL'),
+        data,
+        {'Content-Type': 'application/json', 'Content-Length': content_length, 'x-api-key': os.getenv('FACTORIO_API_KEY')}
+    )
+
+    f = urllib2.urlopen(request)
+    response = f.read()
+    f.close()
+    return json.loads(response.decode('string-escape').strip('"'));
+
+
+def start_factorio():
+    response = apply_action('start')
+    if response['ack'] == 'true':
+        print "Factorio started successfully"
+    else:
+        print "Error: " + response['reason']
+        exit(1)
+
+    return;
+
+
+def stop_factorio():
+    response = apply_action('stop')
+    if response['ack'] == 'true':
+        print "Factorio stopped successfully"
+    else:
+        print "Error: " + response['reason']
+        exit(2)
+
+    return;
+
+
+def status_factorio():
+    response = apply_action('status')
+    if response['ack'] == 'true':
+        print "INSTANCE_IP\t\tSTATE"
+        print response['status']['instance_ip'] + "\t\t" + response['status']['instance_state']
+    else:
+        print "Error: " + response['reason']
+        exit(3)
+
+    return;
+
+
+def check_env_vars():
+    if ('FACTORIO_API_URL' not in os.environ) or ('FACTORIO_API_KEY' not in os.environ) or ('FACTORIO_AUTH_TOKEN' not in os.environ):
+        print "You need to set the following environment variables:"
+        print "FACTORIO_API_URL"
+        print "FACTORIO_API_KEY"
+        print "FACTORIO_AUTH_TOKEN"
+        exit(4)
+    return;
+
+def start():
+
+    parser = argparse.ArgumentParser(description='Manage factorio in AWS.')
+    parser.add_argument('action', metavar='<action>', nargs=1, help='action to perform (start|stop|status)')
+
+    check_env_vars()
+
+    action = parser.parse_args().action[0]
+
+    if action == 'start':
+        start_factorio()
+    elif action == 'stop':
+        stop_factorio()
+    elif action == 'status':
+        status_factorio()
+    else:
+        print "Action not recognized"
+        exit(5)
+
+    return;
+
+start()
+
+exit(0)
