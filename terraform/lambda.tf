@@ -22,20 +22,36 @@ EOF
 resource "aws_iam_policy" "allow_asg_access" {
   name        = "factorio-allow-asg-access"
   path        = "/"
-  description = "Allow lambda to change the autoscaling:SetDesiredCapacity setting on factorio asg"
+  description = "Allow lambda to do API requests on autoscaling and ec2"
 
   policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "Stmt1504922516544",
+      "Sid": "1",
       "Action": [
         "autoscaling:SetDesiredCapacity"
       ],
       "Effect": "Allow",
       "Resource": "${aws_autoscaling_group.factorio.arn}"
-    }
+    },
+    {
+      "Sid": "2",
+      "Action": [
+        "autoscaling:DescribeAutoScalingGroups"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Sid": "3",
+      "Action": [
+         "ec2:DescribeInstances"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+   }
   ]
 }
 EOF
@@ -54,6 +70,7 @@ resource "aws_lambda_function" "manage_factorio" {
   handler          = "manage_factorio.handler"
   source_code_hash = "${base64sha256(file("manage_factorio.zip"))}"
   runtime          = "nodejs6.10"
+  timeout          = 5
 
   environment {
     variables = {
