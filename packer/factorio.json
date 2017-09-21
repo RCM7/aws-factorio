@@ -1,20 +1,23 @@
 {
   "variables": {
-    "factorio_version" : "{{env `factorio_version`}}"
+    "factorio_version" : "{{env `factorio_version`}}",
+    "source_ami" : "{{env `source_ami`}}",
+    "vpc_id" : "{{env `vpc_id`}}",
+    "subnet_id" : "{{env `subnet_id`}}"
   },
 
   "builders": [{
     "type": "amazon-ebs",
     "region": "eu-west-1",
-    "source_ami": "ami-88e60ff1",
+    "source_ami": "{{user `source_ami`}}",
     "instance_type": "t2.micro",
     "ssh_username": "admin",
     "associate_public_ip_address": true,
-    "vpc_id": "vpc-800c81e7",
-    "subnet_id": "subnet-f51995bc",
+    "vpc_id": "{{user `vpc_id`}}",
+    "subnet_id": "{{user `subnet_id`}}",
     "ami_name": "factorio-{{user `factorio_version`}}-({{isotime \"20060102150405\"}})"
   }],
-  
+
   "provisioners": [
     {
       "type": "ansible",

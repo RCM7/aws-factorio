@@ -1,0 +1,6 @@
+{
+  "factorio_version": "0.15.34",
+  "source_ami": "ami-d037cda9",
+  "vpc_id": "",
+  "subnet_id": ""
+}

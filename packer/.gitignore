@@ -1,2 +1,3 @@
 playbook.retry
 roles
+variables.json
