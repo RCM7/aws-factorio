@@ -18,7 +18,6 @@ resource "aws_iam_role" "iam_for_lambda" {
 EOF
 }
 
-
 resource "aws_iam_policy" "allow_asg_access" {
   name        = "factorio-allow-asg-access"
   path        = "/"
@@ -55,12 +54,11 @@ resource "aws_iam_policy" "allow_asg_access" {
   ]
 }
 EOF
-
 }
 
 resource "aws_iam_role_policy_attachment" "allow_asg_access" {
-    role       = "${aws_iam_role.iam_for_lambda.name}"
-    policy_arn = "${aws_iam_policy.allow_asg_access.arn}"
+  role       = "${aws_iam_role.iam_for_lambda.name}"
+  policy_arn = "${aws_iam_policy.allow_asg_access.arn}"
 }
 
 resource "aws_lambda_function" "manage_factorio" {
@@ -74,8 +72,8 @@ resource "aws_lambda_function" "manage_factorio" {
 
   environment {
     variables = {
-      ASG_NAME = "factorio"
-      REGION = "${var.aws_region}"
+      ASG_NAME   = "factorio"
+      REGION     = "${var.aws_region}"
       AUTH_TOKEN = "${var.lambda_auth_token}"
     }
   }
@@ -90,4 +88,3 @@ resource "aws_lambda_permission" "allow_api_gateway" {
 
   source_arn = "arn:aws:execute-api:${var.aws_region}:${var.aws_account_id}:${aws_api_gateway_rest_api.factorio.id}/*/${aws_api_gateway_method.post.http_method}${aws_api_gateway_resource.manage.path}"
 }
-
